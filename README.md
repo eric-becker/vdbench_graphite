@@ -1,6 +1,8 @@
 # vdbench_graphite
 A bash script to feed parsed vdbench output to graphite with example grafana dashboard
 
+![vdbench_graphite dashboard](https://cloud.githubusercontent.com/assets/2933063/18571124/8eab3210-7b75-11e6-83e4-de36763f1722.png "Logo Title Text 1")
+
 ## Install
 Place vdbench_graphite.sh somewhere on the server(s) running vdbench.  
 
