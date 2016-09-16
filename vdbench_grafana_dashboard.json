@@ -37,7 +37,10 @@
   ],
   "id": null,
   "title": "vdbench default",
-  "tags": [],
+  "description": "",
+  "tags": [
+    "vdbench"
+  ],
   "style": "dark",
   "timezone": "browser",
   "editable": true,
@@ -654,7 +657,7 @@
             "fillColor": "rgba(31, 118, 189, 0.18)",
             "full": false,
             "lineColor": "rgb(31, 120, 193)",
-            "show": true
+            "show": false
           },
           "targets": [
             {
@@ -741,7 +744,7 @@
         }
       ],
       "showTitle": true,
-      "title": "Vdbench Realtime Stats"
+      "title": "Vdbench Single Stats (Current)"
     },
     {
       "collapse": false,
@@ -1221,7 +1224,7 @@
   },
   "refresh": "10s",
   "schemaVersion": 12,
-  "version": 6,
+  "version": 2,
   "links": [],
   "gnetId": null
 }
