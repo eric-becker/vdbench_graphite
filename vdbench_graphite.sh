@@ -61,10 +61,10 @@ fi
 # Check to make sure we can talk to graphite before continuing 
 #nc -z $graphite_host $graphite_port 
 
-if [ "$?" != "0" ]; then
-    echo "Can't communicate with graphite at $graphite_host on TCP port $graphite_port."
-    exit
-fi
+#if [ "$?" != "0" ]; then
+#    echo "Can't communicate with graphite at $graphite_host on TCP port $graphite_port."
+#    exit
+#fi
 
 # Assign a prefix based on tag
 if [ -z "$tag" ]; then
