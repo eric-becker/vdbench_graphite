@@ -1,5 +1,5 @@
 # vdbench_graphite
-A bash script to feed parsed vdbench output to graphite with example grafana dashboard
+A simple bash script to feed parsed vdbench output to graphite in realtime with an example grafana dashboard
 
 ![vdbench_graphite dashboard](https://cloud.githubusercontent.com/assets/2933063/18571124/8eab3210-7b75-11e6-83e4-de36763f1722.png "Logo Title Text 1")
 
@@ -26,7 +26,7 @@ By default stats will be sent to graphite running on localhost:2003 under vdbenc
 ./vdbench -f foo.vdb -o outdir.foo | vdbench_graphite.sh -h server01 -p 2003 -t foo.baz -o console.foo
 ```
 
-It is also possible to feed the stats from an existing vdbench workload provided stdout was written to a file. Simply cat the vdbench output file and redirect to vdbench_graphite.sh the same as above.  Note: original timestamps are used for the metrics so it will be necessary to look at the graph historically. 
+It is also possible to feed the stats from an existing vdbench workload provided stdout was written to a file. Simply cat the vdbench output file and redirect to vdbench_graphite.sh the same as above.  Note: original timestamps from vdbench stdout are converted to epoch and used for the timestamps for each metric fed to graphite.  As such, workload that was run a day prior would show up in graphite the previous day as well.  
 
 ```
 cat console.foo | vdbench_graphite.sh -h server01 -p 2003 -t foo.baz 
@@ -41,3 +41,8 @@ retentions = 1s:7d, 5s:30d, 1m:90d
 ```
 
 This will store metrics at 1 second granularity for 7 das, 5 second for 30 days, and 1 minute for 90 days.  Adjust as necessary for your needs. 
+
+## Caveats
+The single stat metrics at the top of the example dashboard can be hidden by clicking on the title.  They will always show the last update received so bear that in mind if updates stop, they may still show values (including the background sparkle line) when no metrics are received.  The larger graphs at the bottom will approrpriately show no value when IO stops (as reflected in the current column).
+
+Accurate time on both the client machine (web browser), the graphana server, and workers is appropriate for accurate stats.  NTP is recommended. Graph rendering is done by the client browser and if the local time is off on that machine, the graphs will show as skewed in time. 
