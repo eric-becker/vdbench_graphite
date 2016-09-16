@@ -45,4 +45,8 @@ This will store metrics at 1 second granularity for 7 das, 5 second for 30 days,
 ## Caveats
 The single stat metrics at the top of the example dashboard can be hidden by clicking on the title.  They will always show the last update received so bear that in mind if updates stop, they may still show values (including the background sparkle line) when no metrics are received.  The larger graphs at the bottom will approrpriately show no value when IO stops (as reflected in the current column).
 
+Some of the single stats will show as orange or red if thresholds are crossed.  For example, once ms latency crosses 5ms the latency quick stat will show orange and once ms latency crosses 10ms the latency will show red.  These are not meant to be absolute and should adjusted for your environment/requirements. 
+
 Accurate time on both the client machine (web browser), the graphana server, and workers is appropriate for accurate stats.  NTP is recommended. Graph rendering is done by the client browser and if the local time is off on that machine, the graphs will show as skewed in time. 
+
+The graphs are ideally setup for a single command vm with multiple workers.  It is expected that the command vm will control the execution of vdbench to the workers (ssh keys) and aggregate the stats to be fed to graphite.  There's no reason that running vdbench running indvidually on hosts (not controlled by a command), but some modification of the graphs would help.  For example, the table for IOPS could be modified to reflect the worker hostnames so each line can be clearly identified.  Also a separate line that totals all of the workers could show aggregate IOPS for all workers.  
