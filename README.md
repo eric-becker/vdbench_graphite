@@ -6,6 +6,11 @@ A bash script to feed parsed vdbench output to graphite with example grafana das
 ## Install
 Place vdbench_graphite.sh somewhere on the server(s) running vdbench.  
 
+## Requirements
+1. netcat
+2. awk 
+3. tee
+
 ## Usage
 Simply run vdbench and pipe to this script.  
 
