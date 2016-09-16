@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # vdbench_graphite.sh is a bash script to feed parsed vdbench output to graphite
-# Eric Becker <ericbecker33@gmail.com>
 # 
 # Requires netcat (nc), tee, awk, graphite, and vdbench 
 # http://www.oracle.com/technetwork/server-storage/vdbench-downloads-1901681.html
