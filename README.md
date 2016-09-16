@@ -20,6 +20,8 @@ Simply run vdbench and pipe to this script.
 ./vdbench -f foo.vdb | vdbench_graphite.sh
 ```
 
+The script will continue to receive input from vdbench in realtime, convert the vdbench timestamp to epoch, format the metrics to be graphite friendly, and send them to grpahite.  
+
 By default stats will be sent to graphite running on localhost:2003 under vdbench.default.[HOSTNAME].[METRIC]  There are no required options, but additional parameters can be passed to change the destination host and/or port as well as a custom tag instead of using the hostname.  To implement multiple custom tags simply separate the tags with periods.  The -o option allows you to write the captured stdout to a file while still feeding graphite.
 
 ```
