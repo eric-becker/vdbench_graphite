@@ -10,6 +10,7 @@ Place vdbench_graphite.sh somewhere on the server(s) running vdbench.
 1. netcat
 2. awk 
 3. tee
+4. Graphite server with Grafana (can be on another server)
 
 ## Usage
 Simply run vdbench and pipe to this script.  
