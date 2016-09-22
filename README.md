@@ -1,5 +1,5 @@
 # vdbench_graphite
-A simple bash script to parse vdbench output and feed it to graphite in realtime with an example grafana dashboard
+A simple bash script to help graph vdbench in real-time or post process.  This script parses vdbench output and feeds it to graphite using original timestamps. Includes an example grafana dashboard that can be tweaked as needed.
 
 ![vdbench_graphite dashboard](https://cloud.githubusercontent.com/assets/2933063/18571124/8eab3210-7b75-11e6-83e4-de36763f1722.png "vdbench_graphite dashboard")
 
