@@ -89,7 +89,7 @@ BEGIN {
 }
 
 # Search for keyword "interval " to define the first title header
-/interval / {
+/  interval  / {
     # Use gsub to remove some unwanted characters
     gsub(/sec/,"",$0)
     gsub(/\//,"",$0)
@@ -107,7 +107,7 @@ BEGIN {
 }
 
 # Search for keyword "rate" ot define the second title header
-/rate/ {
+/^\s*rate/ {
     # Replace 1024**2 with sec so we can mash it from a header from the above section to get MB/sec
     gsub(/1024\*\*2/,"sec",$0)
 	
