@@ -1,20 +1,20 @@
 #!/bin/bash
 
 # vdbench_graphite.sh is a bash script to feed parsed vdbench output to graphite
-# 
-# Requires netcat (nc), tee, awk, graphite, and vdbench 
+#
+# Requires netcat (nc), tee, awk, graphite, and vdbench
 # http://www.oracle.com/technetwork/server-storage/vdbench-downloads-1901681.html
 #
-# To execute, simply run vdbench and pipe to this script.  By default it will send stats to graphite localhost:2003 
-# vdbench.default.[HOSTNAME].[METRIC]  There are no required options, but additional parameters can be passed to   
+# To execute, simply run vdbench and pipe to this script.  By default it will send stats to graphite localhost:2003
+# vdbench.default.[HOSTNAME].[METRIC]  There are no required options, but additional parameters can be passed to
 # change the destination host and/or port as well as a custom tag instead of using the hostname.  To implement multiple
 # custom tags simply separate the tags with periods.
 #
-# It is also possible to feed the stats from an existing vdbench workload provided stdout was written to a file. 
+# It is also possible to feed the stats from an existing vdbench workload provided stdout was written to a file.
 # Simply cat the vdbench output file and redirect to vdbench_graphite.sh the same as above.  Note: original timestamps
-# are used for the metrics so it will be necessary to look at the graph historically. 
+# are used for the metrics so it will be necessary to look at the graph historically.
 #
-# ./vdbench -f foo.vdb -o outdir.foo | vdbench_graphite.sh -h [graphite_host] -p [graphite_port] -t [graphite_tag] -o console.foo
+# ./vdbench -f foo.vdb -o outdir.foo | vdbench_graphite.sh -h [graphite_host] -p [graphite_port] -t [graphite_tag] -n [vdbench_hostname] -o console.foo
 
 
 while [[ $# > 1 ]]
@@ -24,7 +24,7 @@ key="$1"
 case $key in
     -h|--host)
     graphite_host="$2"
-    shift 
+    shift
     ;;
     -p|--port)
     graphite_port="$2"
@@ -34,11 +34,14 @@ case $key in
     tag="$2"
     shift
     ;;
+    -n|--name)
+    name=`echo "$2" | sed 's/\./_/g'`
+    ;;
     -o|--outfile)
     outfile="$2"
     ;;
     *)
-        
+
     ;;
 esac
 shift
@@ -46,31 +49,38 @@ done
 
 echo
 
-# Assume graphite is running on localhost if not defined 
+# Assume graphite is running on localhost if not defined
 if [ -z "$graphite_host" ] ; then
     echo "Graphite host \"-h\" not defined, assuming localhost."
     graphite_host="localhost"
 fi
 
-# Addume graphite is running on port 2003 if not defined
+# Assume graphite is running on port 2003 if not defined
 if [ -z "$graphite_port" ] ; then
-    echo "Graphite port \"-p\" not defined, assuming 2003." 
+    echo "Graphite port \"-p\" not defined, assuming 2003."
     graphite_port="2003"
 fi
 
-# Check to make sure we can talk to graphite before continuing 
-#nc -z $graphite_host $graphite_port 
+# Check to make sure we can talk to graphite before continuing
+#nc -z $graphite_host $graphite_port
 
 #if [ "$?" != "0" ]; then
 #    echo "Can't communicate with graphite at $graphite_host on TCP port $graphite_port."
 #    exit
 #fi
 
-# Assign a prefix based on tag
+# Assign a prefix base using tag
 if [ -z "$tag" ]; then
-    prefix=vdbench.default.`hostname -s`
-else 
-    prefix=vdbench.$tag.`hostname -s`
+    prefix_base=vdbench.default
+else
+    prefix_base=vdbench.$tag
+fi
+
+# Assign a prefix based on name
+if [ -z "$name" ]; then
+    prefix=$prefix_base.`hostname -s`
+else
+    prefix=$prefix_base.${name}
 fi
 
 # If not outfile specified, kick overything to /dev/null
@@ -110,7 +120,7 @@ BEGIN {
 /^\s*rate/ {
     # Replace 1024**2 with sec so we can mash it from a header from the above section to get MB/sec
     gsub(/1024\*\*2/,"sec",$0)
-	
+
     # Use gsub to remove an unwanted /
     gsub(/\//,"",$0)
 
@@ -126,8 +136,8 @@ BEGIN {
 
         title1_column++
         title2_column++
-        title_column++	
-    }		
+        title_column++
+    }
 }
 
 # Search for any lines that do not have letters, assumed to be vdbench metrics
@@ -157,7 +167,7 @@ BEGIN {
             print prefix"."title_array[title_column] " " stats_array[stats_column] " " epochtime
             title_column++
             stats_column++
-        } 
+        }
     }
 }
 
@@ -170,3 +180,4 @@ wait
 
 echo
 echo "Done"
+
