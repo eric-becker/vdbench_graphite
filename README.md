@@ -39,7 +39,7 @@ It is also possible to feed the stats from an existing vdbench workload provided
 cat console.foo | vdbench_graphite.sh -h server01 -p 2003 -t foo.baz 
 ```
 
-You can also specify a hostname while feeding in stats from an existing vdbench workload if you are unable to execute the script on the host running vdbench.
+You can additonally specify the hostname of the system where vdbench stats were collected if executing this script from another host.
 
 ```
 cat console.foo | vdbench_graphite.sh -h server01 -p 2003 -t foo.baz -n host.example.com
