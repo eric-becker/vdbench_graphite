@@ -39,6 +39,12 @@ It is also possible to feed the stats from an existing vdbench workload provided
 cat console.foo | vdbench_graphite.sh -h server01 -p 2003 -t foo.baz 
 ```
 
+You can also specify a hostname while feeding in stats from an existing vdbench workload if you are unable to execute the script on the host running vdbench.
+
+```
+cat console.foo | vdbench_graphite.sh -h server01 -p 2003 -t foo.baz -n host.example.com
+```
+
 Installing and configuring graphite and grafana are beyond the scope of this README.  As long as there is an appropriately configured storage schema for graphite, the graphs should look good.  If you notice gaps in the graphs verify that that the "interval=" parameter in your vdbench config matches the lowest retention period in storage-schemas.conf.  The easiest configuration (and highest granularity) is "interval=1" in the vdbench config and a stanza in storage-schemas.conf like:
 
 ```
@@ -57,3 +63,4 @@ Some of the single stats will show as orange or red if thresholds are crossed.  
 Accurate time on both the client machine (web browser), the graphana server, and workers is appropriate for accurate stats.  NTP is recommended. Graph rendering is done by the client browser and if the local time is off on that machine, the graphs will show as skewed in time. 
 
 The graphs are ideally setup for a single command vm with multiple workers.  It is expected that the command vm will control the execution of vdbench to the workers (ssh keys) and aggregate the stats to be fed to graphite.  There's no reason that  vdbench running indvidually on hosts (not controlled by a command) wouldn't also work, but some modification of the graphs would help.  For example, the table for IOPS could be modified to reflect the worker hostnames so each line can be clearly identified.  Also a separate line that totals all of the workers could show aggregate IOPS for all workers.  
+
